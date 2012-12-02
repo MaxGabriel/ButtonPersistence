@@ -17,13 +17,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    
+    
+    UISwitch *onOffSwitch = [[UISwitch alloc] init];
+    
+    // If it is the first time were are running this code, we will get nil from `NSUserDefaults`, and we'll turn the switch off.
+    // After the user has set the switch, it will store the value in NSUserDefaults and we can remember what to set it to the next time viewDidLoad is called.
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SwitchKey"]) {
+        [onOffSwitch setOn:YES animated:NO];
+    } else {
+        [onOffSwitch setOn:NO animated:NO];
+    }
+    
+    [onOffSwitch sizeToFit];
+    onOffSwitch.center = CGPointMake(CGRectGetMidX(self.view.frame), CGRectGetMidY(self.view.frame));
+    [self.view addSubview:onOffSwitch];
+    
+    [onOffSwitch addTarget:self action:@selector(switchPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
-- (void)didReceiveMemoryWarning
+- (void)switchPressed:(UISwitch *)theSwitch
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    NSLog(@"Switch isOn value is: %i",theSwitch.isOn);
+    
+    if (theSwitch.isOn) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"SwitchKey"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"SwitchKey"];
+    }
+    
+    // Reorder your table view accordingly.
+    
 }
 
 @end
